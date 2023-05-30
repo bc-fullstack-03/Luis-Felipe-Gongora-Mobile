@@ -1,6 +1,6 @@
-import { Text, View, Button } from 'react-native';
+import { Text, View } from 'react-native';
 
-function Home({ navigation }) {
+function Home() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Home</Text>
