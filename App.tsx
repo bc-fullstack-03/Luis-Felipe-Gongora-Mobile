@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Login from './src/Screens/Login';
 import SignUp from './src/Screens/SignUp';
 import Home from './src/Screens/Home';
+import Friends from './src/Screens/Friends';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -21,6 +22,7 @@ function App() {
       ) : (
         <Tab.Navigator>
           <Tab.Screen name='Home' component={Home} />
+          <Tab.Screen name='Friends' component={Friends} />
         </Tab.Navigator>
       )}
     </NavigationContainer>
