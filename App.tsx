@@ -1,13 +1,3 @@
-import * as React from 'react';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Login from './src/Screens/Login';
-import SignUp from './src/Screens/SignUp';
-import Home from './src/Screens/Home';
-import Friends from './src/Screens/Friends';
-import Profile from './src/Screens/Profile';
-import { THEME } from './src/theme';
 import {
   useFonts,
   Inter_400Regular,
@@ -15,7 +5,22 @@ import {
   Inter_700Bold,
   Inter_900Black,
 } from '@expo-google-fonts/inter';
+import React, { useContext, useEffect } from 'react';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import { THEME } from './src/theme';
+import Home from './src/Screens/Home';
+import Login from './src/Screens/Login';
+import SignUp from './src/Screens/SignUp';
+import Friends from './src/Screens/Friends';
+import Profile from './src/Screens/Profile';
 import Loading from './src/components/Loading';
+import {
+  Provider as AuthProvider,
+  Context as AuthContext,
+} from './src/context/AuthContext';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,7 +35,7 @@ const AppTheme = {
 };
 
 function App() {
-  const isLoggedIn = false;
+  const { token, tryLocalLogin, isLoading } = useContext(AuthContext);
 
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -39,13 +44,17 @@ function App() {
     Inter_900Black,
   });
 
-  if (!fontsLoaded) {
+  useEffect(() => {
+    tryLocalLogin();
+  }, []);
+
+  if (!fontsLoaded || isLoading) {
     return <Loading />;
   }
 
   return (
     <NavigationContainer theme={AppTheme}>
-      {!isLoggedIn ? (
+      {!token ? (
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
@@ -66,4 +75,10 @@ function App() {
   );
 }
 
-export default App;
+export default () => {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+};

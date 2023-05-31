@@ -3,6 +3,7 @@ import {
   Lock,
   IdentificationCard,
 } from 'phosphor-react-native';
+import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, Image } from 'react-native';
 
 import Spacer from '../Spacer';
@@ -13,14 +14,20 @@ import { styles } from './styles';
 import { THEME } from '../../theme';
 
 import logo from '../../../assets/images/parrot-logo.png';
+import { Auth } from '../../Screens/Model/Auth';
 
 interface AuthFormProps {
   authFormSubtitle: string;
   submitFormButtonText: string;
+  submitFormButtonAction: (auth: Auth) => void;
   signUp?: boolean;
 }
 
 function AuthForm(props: AuthFormProps) {
+  const [user, setUser] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -32,7 +39,13 @@ function AuthForm(props: AuthFormProps) {
       <Input.Root>
         <Input.Icon>
           <EnvelopeSimple color={THEME.COLORS.INPUT} />
-          <Input.Input placeholder='Digite seu e-mail' autoCapitalize='none' />
+          <Input.Input
+            value={user}
+            onChangeText={setUser}
+            autoCorrect={false}
+            placeholder='Digite seu e-mail'
+            autoCapitalize='none'
+          />
         </Input.Icon>
       </Input.Root>
       <Spacer />
@@ -42,6 +55,8 @@ function AuthForm(props: AuthFormProps) {
             <Input.Icon>
               <IdentificationCard color={THEME.COLORS.INPUT} />
               <Input.Input
+                value={name}
+                onChangeText={setName}
                 placeholder='Digite seu nome'
                 autoCapitalize='words'
                 autoCorrect={false}
@@ -55,6 +70,8 @@ function AuthForm(props: AuthFormProps) {
         <Input.Icon>
           <Lock color={THEME.COLORS.INPUT} />
           <Input.Input
+            value={password}
+            onChangeText={setPassword}
             placeholder='********'
             autoCapitalize='none'
             autoCorrect={false}
@@ -63,7 +80,14 @@ function AuthForm(props: AuthFormProps) {
         </Input.Icon>
       </Input.Root>
       <Spacer />
-      <Button title={props.submitFormButtonText} onPress={() => {}} />
+      <Button
+        title={props.submitFormButtonText}
+        onPress={() => {
+          props.signUp
+            ? props.submitFormButtonAction({ user, name, password })
+            : props.submitFormButtonAction({ user, password });
+        }}
+      />
     </KeyboardAvoidingView>
   );
 }
