@@ -3,7 +3,7 @@ import {
   Lock,
   IdentificationCard,
 } from 'phosphor-react-native';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, Image } from 'react-native';
 
 import Spacer from '../Spacer';

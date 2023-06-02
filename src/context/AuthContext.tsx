@@ -9,11 +9,11 @@ interface AuthContext {
   token: string;
   user: string;
   profile: string;
-  name: string;
   errorMessage: string;
   isLoading: boolean;
   login?: () => void;
   register?: () => void;
+  logout?: () => void;
   tryLocalLogin?: () => void;
 }
 
@@ -21,7 +21,6 @@ const defaultValue = {
   token: '',
   user: '',
   profile: '',
-  name: '',
   errorMessage: '',
   isLoading: true,
 };
@@ -48,6 +47,14 @@ const Provider = ({ children }: { children: ReactNode }) => {
           ...state,
           errorMessage: '',
           ...action.payload,
+        };
+      case 'logout':
+        return {
+          token: '',
+          profile: '',
+          user: '',
+          errorMessage: '',
+          isLoading: false,
         };
       default:
         return state;
@@ -111,9 +118,6 @@ const Provider = ({ children }: { children: ReactNode }) => {
       dispatch({
         type: 'user_created',
         isLoading: false,
-        payload: {
-          name: auth.name,
-        },
       });
     } catch (err) {
       dispatch({
@@ -123,12 +127,25 @@ const Provider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      await SecureStore.deleteItemAsync('token');
+      await SecureStore.deleteItemAsync('user');
+      await SecureStore.deleteItemAsync('profile');
+
+      dispatch({
+        type: 'logout',
+      });
+    } catch (err) {}
+  };
+
   return (
     <Context.Provider
       value={{
         ...state,
         login,
         register,
+        logout,
         tryLocalLogin,
       }}
     >

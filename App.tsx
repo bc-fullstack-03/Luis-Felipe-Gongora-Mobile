@@ -6,6 +6,7 @@ import {
   Inter_900Black,
 } from '@expo-google-fonts/inter';
 import React, { useContext, useEffect } from 'react';
+import { House, User, UsersThree } from 'phosphor-react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -65,7 +66,25 @@ function App() {
           <Stack.Screen name='SignUp' component={SignUp} />
         </Stack.Navigator>
       ) : (
-        <Tab.Navigator>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ color, size }) => {
+              switch (route.name) {
+                case 'Home':
+                  return <House size={size} color={color} />;
+                case 'Friends':
+                  return <UsersThree size={size} color={color} />;
+                case 'Profile':
+                  return <User size={size} color={color} />;
+                default:
+                  return null;
+              }
+            },
+            tabBarStyle: { backgroundColor: THEME.COLORS.BACKGROUND_800 },
+            tabBarShowLabel: false,
+            headerShown: false,
+          })}
+        >
           <Tab.Screen name='Home' component={Home} />
           <Tab.Screen name='Friends' component={Friends} />
           <Tab.Screen name='Profile' component={Profile} />

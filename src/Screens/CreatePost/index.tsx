@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { styles } from './styles';
 
-function Loading() {
+function CreatePost() {
   return (
     <View style={styles.container}>
-      <Text>Loading...</Text>
+      <Text>CreatePost</Text>
     </View>
   );
 }
 
-export default Loading;
+export default CreatePost;
