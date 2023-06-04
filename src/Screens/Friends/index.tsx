@@ -1,11 +1,11 @@
 import { SafeAreaView, FlatList } from 'react-native';
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 
 import { styles } from './styles';
 
 import { api } from '../../services/api';
-import { Context as AuthContext } from '../../context/AuthContext';
 import ProfileItem from '../../components/ProfileItem';
+import { Context as AuthContext } from '../../context/AuthContext';
 
 function Friends() {
   const { token, profile } = useContext(AuthContext);
@@ -39,13 +39,14 @@ function Friends() {
     try {
       await api.post(`/profiles/${profileId}/follow`, null, authHeader);
       setProfileList((profiles) => {
-        const newProfileList = profiles.map((p) => {
-          if (p.id === profileId) {
-            !p.followers.includes(profile) && p.followers.push(profile);
+        const newProfiles = profiles.map((profile) => {
+          if (profile._id == profileId) {
+            !profile.followers.includes(profile) &&
+              profile.followers.push(profile);
           }
-          return p;
+          return profile;
         });
-        return [...newProfileList];
+        return [...newProfiles];
       });
     } catch (err) {
       alert('Erro ao seguir usuario');
