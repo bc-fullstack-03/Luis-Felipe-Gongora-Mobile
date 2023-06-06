@@ -22,6 +22,7 @@ import {
   Provider as AuthProvider,
   Context as AuthContext,
 } from './src/context/AuthContext';
+import { navigationRef } from './src/RootNavigation';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -54,7 +55,7 @@ function App() {
   }
 
   return (
-    <NavigationContainer theme={AppTheme}>
+    <NavigationContainer theme={AppTheme} ref={navigationRef}>
       {!token ? (
         <Stack.Navigator
           screenOptions={{

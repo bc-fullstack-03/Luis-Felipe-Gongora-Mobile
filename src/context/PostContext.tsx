@@ -1,14 +1,17 @@
+import * as SecureStore from 'expo-secure-store';
 import React, { useReducer, ReactNode, createContext } from 'react';
 
 import { api } from '../services/api';
 import { Post } from '../Screens/Model/Post';
-import { getProfile, getAuthHeader } from '../services/auth';
+import { navigate } from '../RootNavigation';
+import { getProfile, getAuthHeader, getUser } from '../services/auth';
 
 interface PostContext {
   posts: Post[];
   getPosts?: () => void;
   likePost?: ({ postId }: { postId: string }) => void;
   unlikePost?: ({ postId }: { postId: string }) => void;
+  createPost?: (postData) => void;
 }
 
 const defaultValue = {
@@ -44,6 +47,8 @@ const Provider = ({ children }: { children: ReactNode }) => {
         return {
           posts: [...newPostsUnlike],
         };
+      case 'create_post':
+        return { posts: [action.payload, ...state.posts] };
       default:
         return state;
     }
@@ -88,6 +93,38 @@ const Provider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const createPost = async ({ title, description, image }) => {
+    try {
+      const token = await SecureStore.getItemAsync('token');
+      const user = await getUser();
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('file', image);
+
+      const { data } = await api.post('posts', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const correctData = {
+        ...data,
+        description: `http://192.168.1.100:9000/${data.description}`,
+        profile: { name: user },
+      };
+
+      dispatch({
+        type: 'create_post',
+        payload: { ...correctData },
+      });
+      navigate('PostList');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Context.Provider
       value={{
@@ -95,6 +132,7 @@ const Provider = ({ children }: { children: ReactNode }) => {
         getPosts,
         likePost,
         unlikePost,
+        createPost,
       }}
     >
       {children}
