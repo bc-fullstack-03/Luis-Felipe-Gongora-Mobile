@@ -14,7 +14,7 @@ import { styles } from './styles';
 import { THEME } from '../../theme';
 
 import logo from '../../../assets/images/parrot-logo.png';
-import { Auth } from '../../Screens/Model/Auth';
+import { Auth } from '../../Model/Auth';
 
 interface AuthFormProps {
   authFormSubtitle: string;

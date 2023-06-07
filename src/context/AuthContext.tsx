@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import React, { useReducer, ReactNode, createContext } from 'react';
 
 import { api } from '../services/api';
-import { Auth, UserToken } from '../Screens/Model/Auth';
+import { Auth, UserToken } from '../Model/Auth';
 
 interface AuthContext {
   token: string;
@@ -66,18 +66,26 @@ const Provider = ({ children }: { children: ReactNode }) => {
   const login = async (auth: Auth) => {
     try {
       const { data } = await api.post('/security/login', auth);
-      const { user, profile } = jwtDecode(data.accessToken) as UserToken;
+      const { profile } = jwtDecode(data.accessToken) as UserToken;
 
       await SecureStore.setItemAsync('token', data.accessToken);
-      await SecureStore.setItemAsync('user', user);
+
       await SecureStore.setItemAsync('profile', profile);
+
+      const res = await api.get('/users/me', {
+        headers: {
+          Authorization: `Bearer ${data.accessToken}`,
+        },
+      });
+
+      await SecureStore.setItemAsync('user', res.data.profile.name);
 
       dispatch({
         type: 'login',
         payload: {
           token: data.accessToken,
           profile: profile,
-          user: user,
+          user: res.data.profile.name,
           isLoading: false,
         },
       });

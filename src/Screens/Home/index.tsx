@@ -5,6 +5,7 @@ import PostList from '../PostList';
 import CreatePost from '../CreatePost';
 
 import { Provider as PostProvider } from '../../context/PostContext';
+import Comments from '../Comments';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ function Home() {
       >
         <Stack.Screen name='PostList' component={PostList} />
         <Stack.Screen name='CreatePost' component={CreatePost} />
+        <Stack.Screen name='Comments' component={Comments} />
       </Stack.Navigator>
     </PostProvider>
   );

@@ -2,20 +2,36 @@ import * as SecureStore from 'expo-secure-store';
 import React, { useReducer, ReactNode, createContext } from 'react';
 
 import { api } from '../services/api';
-import { Post } from '../Screens/Model/Post';
+import { Post } from '../Model/Post';
 import { navigate } from '../RootNavigation';
 import { getProfile, getAuthHeader, getUser } from '../services/auth';
 
 interface PostContext {
   posts: Post[];
   getPosts?: () => void;
-  likePost?: ({ postId }: { postId: string }) => void;
-  unlikePost?: ({ postId }: { postId: string }) => void;
+  likePost?: ({ postId, profile }: { postId: string; profile: string }) => void;
+  unlikePost?: ({
+    postId,
+    profile,
+  }: {
+    postId: string;
+    profile: string;
+  }) => void;
   createPost?: (postData) => void;
+  getPost?: (postId: string) => void;
+  sendComments?: ({
+    description,
+    postId,
+  }: {
+    description: string;
+    postId: string;
+  }) => void;
+  post?: Post;
 }
 
 const defaultValue = {
   posts: [],
+  post: null,
 };
 
 const Context = createContext<PostContext>(defaultValue);
@@ -49,6 +65,10 @@ const Provider = ({ children }: { children: ReactNode }) => {
         };
       case 'create_post':
         return { posts: [action.payload, ...state.posts] };
+      case 'get_post':
+        return { ...state, post: action.payload };
+      case 'send_comments':
+        return { ...state };
       default:
         return state;
     }
@@ -67,29 +87,30 @@ const Provider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const likePost = async ({ postId }) => {
+  const likePost = async ({ postId, profile }) => {
     try {
       const authHeader = await getAuthHeader();
       await api.post(`/posts/${postId}/like`, null, authHeader);
-      const profile = await getProfile();
       dispatch({
         type: 'like_post',
-        payload: { id: postId, profile },
+        payload: { id: postId, profile: profile },
       });
-    } catch (err) {}
+    } catch (err) {
+      console.log('Erro no like');
+    }
   };
 
-  const unlikePost = async ({ postId }) => {
+  const unlikePost = async ({ postId, profile }) => {
     try {
       const authHeader = await getAuthHeader();
       await api.post(`/posts/${postId}/unlike`, null, authHeader);
       const profile = await getProfile();
       dispatch({
         type: 'unlike_post',
-        payload: { id: postId, profile },
+        payload: { id: postId, profile: profile },
       });
     } catch (err) {
-      alert('erro no unlike');
+      console.log('erro no unlike');
     }
   };
 
@@ -111,7 +132,7 @@ const Provider = ({ children }: { children: ReactNode }) => {
 
       const correctData = {
         ...data,
-        description: `http://192.168.1.100:9000/${data.description}`,
+        description: `http://192.168.1.105:9000/${data.description}`,
         profile: { name: user },
       };
 
@@ -125,6 +146,39 @@ const Provider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const getPost = async (_postId: string) => {
+    try {
+      const authHeader = await getAuthHeader();
+      const { data } = await api.get(`/posts/${_postId}`, authHeader);
+      dispatch({
+        type: 'get_post',
+        payload: data,
+      });
+      navigate('Comments');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const sendComments = async ({ description, postId }) => {
+    try {
+      const authHeader = await getAuthHeader();
+
+      const data = {
+        description: description,
+      };
+
+      await api.post(`/posts/${postId}/comments`, data, authHeader);
+      getPost(postId);
+      getPosts();
+      dispatch({
+        type: 'send_comments',
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Context.Provider
       value={{
@@ -133,6 +187,8 @@ const Provider = ({ children }: { children: ReactNode }) => {
         likePost,
         unlikePost,
         createPost,
+        getPost,
+        sendComments,
       }}
     >
       {children}

@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Button from '../Button';
 import { styles } from './styles';
 
-import { File } from '../../Screens/Model/File';
+import { File } from '../../Model/File';
 
 interface PostImagePickerProps {
   onFileLoaded: (file: File) => void;

@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { UserCircle } from 'phosphor-react-native';
 
 import { styles } from './styles';
-import { File } from '../Model/File';
+import { File } from '../../Model/File';
 
 import { THEME } from '../../theme';
 import Spacer from '../../components/Spacer';

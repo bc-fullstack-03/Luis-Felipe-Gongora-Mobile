@@ -10,6 +10,7 @@ import { Context as AuthContext } from '../../context/AuthContext';
 function Friends() {
   const { token, profile } = useContext(AuthContext);
   const [profilesList, setProfileList] = useState([]);
+
   const authHeader = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -44,12 +45,12 @@ function Friends() {
             !profile.followers.includes(profile) &&
               profile.followers.push(profile);
           }
-          return profile;
+          return { ...profile };
         });
         return [...newProfiles];
       });
     } catch (err) {
-      alert('Erro ao seguir usuario');
+      alert('Erro ao seguir usuário');
     }
   }
 
