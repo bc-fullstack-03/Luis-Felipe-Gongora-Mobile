@@ -47,6 +47,7 @@ Instale todas as dependências necessárias:
 npm install
 ```
 
+Antes de ir para a proxima instrução, é importante que você preencha o IP da sua máquina no arquivo "env.ts" localizado na pasta "src", caso contrário pode gerar erros e bugs inesperados no software.
 Em seguida, execute o comando:
 
 ```bash
