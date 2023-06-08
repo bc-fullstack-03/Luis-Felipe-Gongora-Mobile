@@ -17,22 +17,22 @@ function Friends() {
     },
   };
 
-  useEffect(() => {
-    const getProfiles = async () => {
-      try {
-        const { data } = await api.get('/profiles', authHeader);
-        const filteredProfiles = data.filter((profiles) => {
-          if (profiles._id === profile) {
-            return false;
-          }
-          return true;
-        });
-        setProfileList(filteredProfiles);
-      } catch (err) {
-        alert('Erro ao obter lista de usuario');
-      }
-    };
+  const getProfiles = async () => {
+    try {
+      const { data } = await api.get('/profiles', authHeader);
+      const filteredProfiles = data.filter((profiles) => {
+        if (profiles._id === profile) {
+          return false;
+        }
+        return true;
+      });
+      setProfileList(filteredProfiles);
+    } catch (err) {
+      alert('Erro ao obter lista de usuario');
+    }
+  };
 
+  useEffect(() => {
     getProfiles();
   }, []);
 
@@ -49,6 +49,7 @@ function Friends() {
         });
         return [...newProfiles];
       });
+      getProfiles();
     } catch (err) {
       alert('Erro ao seguir usuário');
     }

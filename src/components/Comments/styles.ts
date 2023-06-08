@@ -21,6 +21,10 @@ export const styles = StyleSheet.create({
     color: THEME.COLORS.TEXT,
     marginStart: 6,
   },
+  containerDescription: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   commentsDescription: {
     fontFamily: THEME.FONT_FAMILY.REGULAR,
     fontSize: THEME.FONT_SIZE.SM,

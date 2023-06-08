@@ -1,36 +1,70 @@
-# TypeScript Example
+# Projeto Mobile Rede Social BootCamp SysMap
 
-<p>
-  <!-- iOS -->
-  <img alt="Supports Expo iOS" longdesc="Supports Expo iOS" src="https://img.shields.io/badge/iOS-4630EB.svg?style=flat-square&logo=APPLE&labelColor=999999&logoColor=fff" />
-  <!-- Android -->
-  <img alt="Supports Expo Android" longdesc="Supports Expo Android" src="https://img.shields.io/badge/Android-4630EB.svg?style=flat-square&logo=ANDROID&labelColor=A4C639&logoColor=fff" />
-  <!-- Web -->
-  <img alt="Supports Expo Web" longdesc="Supports Expo Web" src="https://img.shields.io/badge/web-4630EB.svg?style=flat-square&logo=GOOGLE-CHROME&labelColor=4285F4&logoColor=fff" />
-</p>
+Este é um projeto de rede social simples que permite aos usuários se registrarem, realizar o login, criar postagens, seguir outros usuários e visualizar as suas postagens e as de seus seguidores. Além disso, os usuários podem deixar comentários nas postagens e dar likes tanto nas postagens quanto nos comentários.
 
-```sh
-npx create-react-native-app -t with-typescript
+## Tecnologias Utilizadas
+
+- React-Native
+- Typescript
+- Axios
+- Phosphor Icons
+
+## Como executar
+
+Clone o repositório do Backend usando o seguinte comando no terminal:
+
+```bash
+git clone https://github.com/coe-tech/backend.git
 ```
 
-TypeScript is a superset of JavaScript which gives you static types and powerful tooling in Visual Studio Code including autocompletion and useful inline warnings for type errors.
+Navegue até a pasta clonada:
 
-## 🚀 How to use
+```bash
+cd backend
+```
 
-#### Creating a new project
+Execute o comando para iniciar os containers com Docker:
 
-- Install the CLI: `npm i -g expo-cli`
-- Create a project: `npx create-react-native-app -t with-typescript`
-- `cd` into the project
+```bash
+docker compose up -d
+```
 
-### Adding TypeScript to existing projects
+Quando os containers estiverem rodando no Docker, é hora de iniciar o Mobile:
 
-- Create a blank TypeScript config: `touch tsconfig.json`
-- Run `yarn start` or `npm run start` to automatically configure TypeScript
-- Rename files to TypeScript, `.tsx` for React components and `.ts` for plain typescript files
+```bash
+git clone https://github.com/bc-fullstack-03/Luis-Felipe-Gongora-Mobile.git
+```
 
-> 💡 You can disable the TypeScript setup in Expo CLI with the environment variable `EXPO_NO_TYPESCRIPT_SETUP=1 expo start`
+Navegue até a pasta clonada:
 
-## 📝 Notes
+```bash
+cd Luis-Felipe-Gongora-Mobile
+```
 
-- [Expo TypeScript guide](https://docs.expo.dev/versions/latest/guides/typescript/)
+Instale todas as dependências necessárias:
+
+```bash
+npm install
+```
+
+Em seguida, execute o comando:
+
+```bash
+npm run start
+```
+
+E aperte a letra "A" do teclado no terminal para abrir o emulador do Android Studio para visualizar a aplicação (Lembrando que tem que ter o Android Studio ja instalado e configurado na máquina)!
+
+## Autores
+
+- Luis Felipe Gongora Garcia
+
+## Contato
+
+### Email
+
+- Email: lfelipeggarcia@gmail.com
+
+### Redes Sociais
+
+- LinkedIn: https://www.linkedin.com/in/luis-felipe-gongora-garcia/

@@ -1,9 +1,11 @@
 import * as SecureStore from 'expo-secure-store';
 import React, { useReducer, ReactNode, createContext } from 'react';
 
-import { api } from '../services/api';
+import { Environment } from '../env';
 import { Post } from '../Model/Post';
+import { api } from '../services/api';
 import { navigate } from '../RootNavigation';
+import { Comment } from '../Model/Comment';
 import { getProfile, getAuthHeader, getUser } from '../services/auth';
 
 interface PostContext {
@@ -26,6 +28,11 @@ interface PostContext {
     description: string;
     postId: string;
   }) => void;
+  handleLikeComment?: (
+    comments: Comment,
+    commentId: string,
+    postId: string
+  ) => void;
   post?: Post;
 }
 
@@ -68,6 +75,8 @@ const Provider = ({ children }: { children: ReactNode }) => {
       case 'get_post':
         return { ...state, post: action.payload };
       case 'send_comments':
+        return { ...state };
+      case 'handle_like_comment':
         return { ...state };
       default:
         return state;
@@ -132,7 +141,9 @@ const Provider = ({ children }: { children: ReactNode }) => {
 
       const correctData = {
         ...data,
-        description: `http://192.168.1.105:9000/${data.description}`,
+        description: image
+          ? `http://${Environment.IP}:9000/${data.description}`
+          : data.description,
         profile: { name: user },
       };
 
@@ -179,6 +190,36 @@ const Provider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const handleLikeComment = async (comments, commentId, postId) => {
+    try {
+      const authHeader = await getAuthHeader();
+      const profile = await getProfile();
+
+      if (!comments.likes.includes(profile)) {
+        await api.post(
+          `/posts/${postId}/comments/${commentId}/like`,
+          null,
+          authHeader
+        );
+        getPost(postId);
+        getPosts();
+      } else {
+        await api.post(
+          `/posts/${postId}/comments/${commentId}/unlike`,
+          null,
+          authHeader
+        );
+        getPost(postId);
+        getPosts();
+      }
+      dispatch({
+        type: 'handle_like_comment',
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Context.Provider
       value={{
@@ -189,6 +230,7 @@ const Provider = ({ children }: { children: ReactNode }) => {
         createPost,
         getPost,
         sendComments,
+        handleLikeComment,
       }}
     >
       {children}

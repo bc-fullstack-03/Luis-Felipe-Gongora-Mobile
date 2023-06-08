@@ -5,7 +5,6 @@ import {
   View,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
 } from 'react-native';
 
 import { styles } from './styles';
@@ -14,11 +13,11 @@ import { THEME } from '../../theme';
 import Spacer from '../../components/Spacer';
 import Button from '../../components/Button';
 import { Input } from '../../components/Input';
-import { Context as PostContext } from '../../context/PostContext';
 import PostItem from '../../components/PostItem';
 import CommentsList from '../../components/Comments';
+import { Context as PostContext } from '../../context/PostContext';
 
-function Comments() {
+function PostDetail() {
   const { sendComments, post } = useContext(PostContext);
 
   const [description, setDescription] = useState('');
@@ -54,10 +53,12 @@ function Comments() {
       <FlatList
         data={post.comments}
         keyExtractor={({ _id }) => _id}
-        renderItem={({ item }) => <CommentsList comment={item} />}
+        renderItem={({ item }) => (
+          <CommentsList postId={post._id} comment={item} />
+        )}
       />
     </View>
   );
 }
 
-export default Comments;
+export default PostDetail;

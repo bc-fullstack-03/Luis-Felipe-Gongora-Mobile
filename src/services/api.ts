@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { Environment } from '../env';
+
 export const api = axios.create({
-  baseURL: 'http://192.168.1.105:4000/v1',
+  baseURL: `http://${Environment.IP}:4000/v1`,
 });
